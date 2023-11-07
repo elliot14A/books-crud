@@ -1,0 +1,68 @@
+log:
+  level: debug
+  format: json
+  leak_sensitive_values: true
+serve:
+  proxy:
+    cors:
+      enabled: true
+      allowed_origins:
+        - "*"
+      allowed_methods:
+        - POST
+        - GET
+        - PUT
+        - PATCH
+        - DELETE
+      allowed_headers:
+        - Authorization
+        - Content-Type
+      exposed_headers:
+        - Content-Type
+      allow_credentials: true
+      debug: true
+
+errors:
+  fallback:
+    - json
+
+  handlers:
+    json:
+      enabled: true
+      config:
+        verbose: true
+
+access_rules:
+  repositories:
+    - file:///etc/config/oathkeeper/access-rules/server.json
+
+authorizers:
+  allow:
+    enabled: true
+
+authenticators:
+  anonymous:
+    enabled: true
+    config:
+      subject: guest
+
+  cookie_session:
+    enabled: true
+    config:
+      force_method: "GET"
+      check_session_url: http://server:8080/api/sessions/whoami
+      extra_from: "@this"
+      preserve_path: true
+      only:
+        - accessToken
+        - refreshToken
+
+mutators:
+  header:
+    enabled: true
+    config:
+      headers:
+        X-User: "{{ print .Subject }}"
+        X-Access-Token: "{{ print .Extra.new_access_token }}"
+  noop:
+    enabled: true

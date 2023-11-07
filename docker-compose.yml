@@ -1,0 +1,46 @@
+version: "3"
+services:
+  database:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./volumes/books-crud/mongo-data:/data/db
+    networks:
+      - books-crud
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    stdin_open: true
+    environment:
+      - MONGO_URI=mongodb://database:27017/books-crud
+      - ACCESS_KEY_JWT_SECRET=access_key_secret
+      - REFRESH_KEY_JWT_SECRET=refresh_key_secret
+    depends_on:
+      - database
+    networks:
+      - books-crud
+
+  oathkeeper:
+    image: oryd/oathkeeper:latest-alpine
+    ports:
+      - "4455:4455"
+      - "4456:4456"
+    environment:
+      - LOG_LEVEL=debug
+    volumes:
+      - type: bind
+        source: ./oathkeeper
+        target: /etc/config/oathkeeper
+    command: serve proxy -c "/etc/config/oathkeeper/.oathkeeper.yml"
+    restart: on-failure
+    networks:
+      - books-crud
+
+networks:
+  books-crud:
