@@ -1,13 +1,13 @@
 # Book CRUD Application
 
-This is a Book CRUD (Create, Read, Update, Delete) application with backend in Node.js and an ory oathkeeper API Gateway . It uses Docker Compose for easy setup.
+This is a Book CRUD (Create, Read, Update, Delete) backend built with Node.js and uses ory oathkeeper as Access-Proxy. It uses Docker Compose for easy setup.
 
 ## Prerequisites
 
 - Docker
 - Docker Compose
 
-## Installation
+## Setup
 
 1. Clone the repository:
 
@@ -31,11 +31,11 @@ This is a Book CRUD (Create, Read, Update, Delete) application with backend in N
 
 ### Development
 
-- Backend: [http://127.0.0.1:4455/.brewapps/books-crud/server/health](http://127.0.0.1:4455/.brewapps/books-crud/server/api/health)
+- `/api/health` route: [http://127.0.0.1:4455/.brewapps/books-crud/server/api/health](http://127.0.0.1:4455/.brewapps/books-crud/server/api/health)
 
 ## Note
 
-- For production, it's recommended to use an API gateway like Ory Oathkeeper to secure the backend and avoid direct exposure.
+- For production, it's recommended to use an Access Proxies like Ory Oathkeeper to secure the backend and avoid direct exposure.
 
 # Ory Oathkeeper Working - Simple Explanation
 
@@ -58,3 +58,11 @@ A protected route is accessed when a user is authenticated and has valid access 
 A public route, in contrast, is accessible without authentication. It is open to anonymous access, and requests do not require access tokens. In your configuration, the `anonymous` authenticator is used for these routes, allowing any user to access them without authentication.
 
 In summary, the Ory Oathkeeper configuration distinguishes between routes that require authentication (protected) and routes that do not (public). For protected routes, it checks for valid access tokens and validates them through a separate service, while public routes remain open for anonymous access. This configuration helps ensure that your API is secure and accessible only to authorized users when needed.
+
+## Routes Available
+
+- POST `/api/auth/(register|login|logout)` to register/login/logout a user
+- GET `/api/sessions/whoami` returns the userId when valid cookies are passed(used by oathkeeper)
+- CRUD `/api/books/*` to perform crud operations on books entities
+
+**Note: To make a request to the server use the url `http://127.0.0.1:4455/.brewapps/books-crud/server/`**
