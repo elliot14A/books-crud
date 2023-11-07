@@ -7,7 +7,7 @@
       "strip_path": "/.brewapps/books-crud/server"
     },
     "match": {
-      "url": "http://127.0.0.1:4455/.brewapps/books-crud/server/api/auth/<login|register|health>",
+      "url": "http://127.0.0.1:4455/.brewapps/books-crud/server/api/<(health|auth/register|auth/login)>",
       "methods": ["POST", "GET"]
     },
     "authenticators": [
