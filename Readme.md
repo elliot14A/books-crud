@@ -12,7 +12,7 @@ This is a Book CRUD (Create, Read, Update, Delete) backend built with Node.js an
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/elliot14A/books-crud
+      git clone https://github.com/elliot14A/books-crud
    ```
 
 2. Navigate to the project folder:
